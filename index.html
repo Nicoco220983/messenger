@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5.0//EN">
+<html>
+	<head>
+		<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=ISO-8859-1">
+		<title>Messenger test</title>
+		<link rel="stylesheet" type="text/css" href="client/style.css" />
+		<script src="client/messenger.js"></script>
+		<script>
+			window.onload = function() {
+				// create messenger
+				_messenger = new Messenger('myMessenger');
+				// manage send button
+				_sendButton = document.getElementById('myButton');
+				_sendButton.disabled = false;
+				_sendButton.onclick = function() {
+					if(this.disabled) return;
+					this.disabled=true;
+					var aText = document.getElementById('myTextarea').value;
+					_messenger.send([{act:'add', txt:aText}], function(){
+						_sendButton.disabled=false;
+						location.reload();
+					});
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Messenger test</h1>
+		<textarea id="myTextarea"></textarea><button id="myButton">Send</button>
+		<p id="myMessenger"></p>
+	</body>
+</html>
