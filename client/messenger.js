@@ -4,7 +4,7 @@ function Messenger(iId) {
 	
 	this.defaultCriteria = {act:'get'};
 	
-	this.messageHtmlTemplate = '<div class="message"><table><tr><td class="author"></td><td class="date"></td></tr></table><div class="txt"></div></div>';
+	this.messageHtmlTemplate = '<div class="message"><table><tr><td class="icon"></td><td><table><tr><td class="author"></td><td class="date"></td></tr></table><div class="txt"></div></td></tr></table></div>';
 	
 	this.debug = true;
 	
@@ -55,7 +55,7 @@ function Messenger(iId) {
 	};
 	
 	this.retrieveMessages = function(iCriteria) {
-		this.send([iCriteria], function(oReply) {
+		this.send(iCriteria, function(oReply) {
 		  this.loadMessages(oReply);
 		});
 	};
@@ -73,12 +73,11 @@ function Messenger(iId) {
 	};
 	
 	this.loadAMessage = function(iHtmlElement, iMessage) {
-	  var aHtmlMessage, m;
-	  // tags
+		var aHtmlMessage, m;
+		// tags
 		if(iMessage.tags) {
 			for(var t in iMessage.tags) {
-				aHtmlMessages = iHtmlElement.getElementsByClassName("message");
-				for(m in aHtmlMessages) aHtmlMessages[m].className += " "+iMessage.tags[t];
+				iHtmlElement.className += " "+iMessage.tags[t];
 			}
 		}
 		// author

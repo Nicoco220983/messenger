@@ -10,14 +10,14 @@
 				// create messenger
 				_messenger = new Messenger('myMessenger');
 				// manage send button
-				_sendButton = document.getElementById('myButton');
-				_sendButton.disabled = false;
-				_sendButton.onclick = function() {
+				_commentButton = document.getElementById('myCommentButton');
+				_commentButton.disabled = false;
+				_commentButton.onclick = function() {
 					if(this.disabled) return;
 					this.disabled=true;
 					var aText = document.getElementById('myTextarea').value;
-					_messenger.send([{act:'add', txt:aText}], function(){
-						_sendButton.disabled=false;
+					_messenger.send([{act:'add', txt:aText, tags:['comment']}], function(){
+						_commentButton.disabled=false;
 						location.reload();
 					});
 				}
@@ -26,7 +26,7 @@
 	</head>
 	<body>
 		<h1>Messenger test</h1>
-		<textarea id="myTextarea"></textarea><button id="myButton">Send</button>
+		<textarea id="myTextarea" style="width: 500px; height:50px;"></textarea><button id="myCommentButton">Comment</button>
 		<p id="myMessenger"></p>
 	</body>
 </html>
