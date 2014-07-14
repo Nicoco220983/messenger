@@ -4,7 +4,7 @@ function Messenger(iId) {
 	
 	this.defaultCriteria = {act:'get'};
 	
-	this.messageHtmlTemplate = '<div class="message"><div class="author"></div><div class="date"></div><div class="txt"></div></div>';
+	this.messageHtmlTemplate = '<div class="message"><table><tr><td class="author"></td><td class="date"></td></tr></table><div class="txt"></div></div>';
 	
 	this.debug = true;
 	

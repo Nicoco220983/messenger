@@ -1,5 +1,20 @@
 .message {
-	border: 1px solid black;
+	border: 1px solid #999;
+	border-radius:5px;
 	padding: 2px;
-	margin: 2px;
+	margin: 5px;
+}
+
+.message .author {
+	font-weight: bold;
+}
+
+.message .date {
+	color: #666;
+	font-size: 12px;
+	padding-left: 10px;
+}
+
+.message .txt {
+	padding: 5px 5px 5px 10px;
 }
