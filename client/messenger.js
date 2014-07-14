@@ -4,7 +4,7 @@ function Messenger(iId) {
 	
 	this.defaultCriteria = {act:'get'};
 	
-	this.messageHtmlTemplate = '<div class="message"><div class="date"></div><div class="txt"></div></div>';
+	this.messageHtmlTemplate = '<div class="message"><div class="author"></div><div class="date"></div><div class="txt"></div></div>';
 	
 	this.debug = true;
 	
@@ -36,9 +36,9 @@ function Messenger(iId) {
 					try {
 					  oReply = JSON.parse(xhr.responseText);
 					} catch (e) {
-            console.error(oReply);
-            return;
-          }
+						console.error(oReply);
+						return;
+					}
 					if(this.messenger.debug) { console.log('PHP reply:'); console.log(oReply); }
 					if (oReply!==null && oReply.error!==undefined) {
 						console.error(oReply.error);
@@ -76,20 +76,25 @@ function Messenger(iId) {
 	  var aHtmlMessage, m;
 	  // tags
 		if(iMessage.tags) {
-      for(var t in iMessage.tags) {
-        aHtmlMessages = iHtmlElement.getElementsByClassName("message");
-        for(m in aHtmlMessages) aHtmlMessages[m].className += " "+iMessage.tags[t];
-      }
+			for(var t in iMessage.tags) {
+				aHtmlMessages = iHtmlElement.getElementsByClassName("message");
+				for(m in aHtmlMessages) aHtmlMessages[m].className += " "+iMessage.tags[t];
+			}
+		}
+		// author
+		if(iMessage.author) {
+			aHtmlMessages = iHtmlElement.getElementsByClassName("author");
+			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.author;
 		}
 		// date
 		if(iMessage.date) {
-      aHtmlMessages = iHtmlElement.getElementsByClassName("message");
-      for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.date.toString();
+			aHtmlMessages = iHtmlElement.getElementsByClassName("date");
+			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.date.toString();
 		}
 		// text
 		if(iMessage.txt) {
-      var aHtmlMessages = iHtmlElement.getElementsByClassName("txt");
-      for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.txt;
+			var aHtmlMessages = iHtmlElement.getElementsByClassName("txt");
+			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.txt;
 		}
 	};
 	

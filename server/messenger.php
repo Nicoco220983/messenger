@@ -1,11 +1,6 @@
 <?php
 
-// CONFIGURATION VARIABLES ////////////////////////////////
-
-$dbServer="mysql51-83.perso";
-$dbUser="quelquesudb";
-$dbPassword="UoPySeAu";
-$dbDatabase="quelquesudb";
+include 'config.php';
 
 // DB GENERIC FUNCTIONS /////////////////////////////////////
 
@@ -86,7 +81,11 @@ function getMessages(&$iMysqli, &$iRequest, &$oReply) {
   
   $oReply = array();
   foreach ($res as &$message) {
-    $oReply[] = array("txt" => $message['text']);
+    $oReply[] = array(
+		"txt" => $message['text'],
+		"author" => $message['author'],
+		"tags" => $message['tags'],
+		"date" => $message['date'],);
   }
 }
 
@@ -94,12 +93,12 @@ function getMessages(&$iMysqli, &$iRequest, &$oReply) {
 function addMessage(&$iMysqli, &$iRequest, &$oReply) {
 	
 	$text = $iRequest['txt'];
-	$author = $iRequest['author'];
+	$author = (array_key_exists('author', $iRequest) ? $iRequest['author'] : $_SERVER['REMOTE_ADDR']);
 	$tags = $iRequest['tags'];
-	$date = $iRequest['date'];
+	$date = date('Y-m-d H:i:s');
 	
-	$sqlQuery = "INSERT INTO msg_message (text, author, tags, date) VALUES (?,?,?,?)";
-	$sqlBindParams = array('sssd', &$text, &$author, &$tags, &$date);
+	$sqlQuery = "INSERT INTO msg_message (text, author, tags, date) VALUES (?,?,?,STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'))";
+	$sqlBindParams = array('ssss', &$text, &$author, &$tags, &$date);
 	writeInDb($iMysqli, $oReponse, $sqlQuery, $sqlBindParams);
 }
 
