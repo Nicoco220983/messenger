@@ -85,16 +85,47 @@ function Messenger(iId) {
 			aHtmlMessages = iHtmlElement.getElementsByClassName("author");
 			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.author;
 		}
+		// server date
+		if(iMessage.sdate) {
+			this.serverDate = new Date(iMessage.sdate);
+		}
 		// date
 		if(iMessage.date) {
 			aHtmlMessages = iHtmlElement.getElementsByClassName("date");
-			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.date.toString();
+			var aDate = new Date(iMessage.date);
+			var aDateDiff = this.serverDate - aDate;
+			for(m in aHtmlMessages) {
+				aHtmlMessages[m].innerHTML = this.formatDateDiff(aDateDiff);
+				aHtmlMessages[m].title = this.formatDate(aDate);
+			}
 		}
 		// text
 		if(iMessage.txt) {
 			var aHtmlMessages = iHtmlElement.getElementsByClassName("txt");
 			for(m in aHtmlMessages) aHtmlMessages[m].innerHTML = iMessage.txt;
 		}
+	};
+	
+	// convert a date diff (in milliseconds) into a formatted str field
+	this.dateDiffUnits = [
+			{str:"year", nb:1000*60*60*24*365},
+			{str:"month", nb:1000*60*60*24*30},
+			{str:"week", nb:1000*60*60*24*7},
+			{str:"day", nb:1000*60*60*24},
+			{str:"hour", nb:1000*60*60},
+			{str:"minute", nb:1000*60},
+			{str:"second", nb:1000}];
+	this.formatDateDiff = function(iDateDiff) {
+		var aDateDiffUnit;
+		for(var u in this.dateDiffUnits) {
+			aDateDiffUnit = this.dateDiffUnits[u];
+			if(iDateDiff >= aDateDiffUnit.nb) break;
+		}
+		var aNbUnit = Math.floor(iDateDiff/aDateDiffUnit.nb);
+		return ""+aNbUnit+" "+aDateDiffUnit.str+((aNbUnit>1)?"s":"")+" ago";
+	};
+	this.formatDate = function(iGmtDate) {
+		return iGmtDate.toLocaleString();
 	};
 	
 	this.init(iId);

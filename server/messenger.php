@@ -74,9 +74,9 @@ function addMessage(&$iMysqli, &$iRequest, &$oReply) {
 	$text = $iRequest['txt'];
 	$author = (array_key_exists('author', $iRequest) ? $iRequest['author'] : $_SERVER['REMOTE_ADDR']);
 	$tags = (array_key_exists('tags', $iRequest) ? implode(',', $iRequest['tags']) : NULL);
-	$date = date('Y-m-d H:i:s');
+	$date = gmdate('Y-m-d\TH:i:s\Z');
 	
-	$sqlQuery = "INSERT INTO msg_message (text, author, tags, date) VALUES (?,?,?,STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'))";
+	$sqlQuery = "INSERT INTO msg_message (text, author, tags, date) VALUES (?,?,?,STR_TO_DATE(?,'%Y-%m-%dT%H:%i:%sZ'))";
 	$sqlBindParams = array('ssss', &$text, &$author, &$tags, &$date);
 	writeInDb($iMysqli, $oReponse, $sqlQuery, $sqlBindParams);
 }
@@ -84,17 +84,19 @@ function addMessage(&$iMysqli, &$iRequest, &$oReply) {
 // retrieve messages from DB according to input criteria
 function getMessages(&$iMysqli, &$iRequest, &$oReply) {
 
-	$sqlQuery = "SELECT text, author, tags, date FROM msg_message LIMIT 20";
+	$sqlQuery = "SELECT text, author, tags, DATE_FORMAT(date, '%Y-%m-%dT%H:%i:%sZ') AS date FROM msg_message ORDER BY id DESC LIMIT 20";
 	$res = readInDb($iMysqli, $oReply, $sqlQuery);
 
 	$oReply = array();
 	foreach ($res as &$message) {
-		$oReply[] = array(
+		$aReply = array(
 			"txt" => $message['text'],
 			"author" => $message['author'],
 			"tags" => (array_key_exists('tags', $message) ? explode(',', $message['tags']) : NULL),
 			"date" => $message['date']);
+		array_unshift($oReply, $aReply);
 	}
+	if(!empty($oReply)) $oReply[0]["sdate"] = gmdate('Y-m-d\TH:i:s\Z');
 }
 
 // ENTRY /////////////////////////////////////////////////////
